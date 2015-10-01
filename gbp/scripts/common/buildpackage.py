@@ -114,7 +114,7 @@ def dump_tree(repo, export_dir, treeish, with_submodules, recursive=True):
     pipe = pipes.Template()
     pipe.prepend('git archive --format=tar --prefix=%s %s -- %s' %
                  (prefix, treeish, ' '.join(paths)), '.-')
-    pipe.append('tar -C %s -xf -' % output_dir,  '-.')
+    pipe.append('tar -C %s -xf -' % pipes.quote(output_dir), '-.')
     top = os.path.abspath(os.path.curdir)
     try:
         ret = pipe.copy('', '')
@@ -131,7 +131,7 @@ def dump_tree(repo, export_dir, treeish, with_submodules, recursive=True):
                 pipe = pipes.Template()
                 pipe.prepend('git archive --format=tar --prefix=%s%s/ %s' %
                              (prefix, tarpath, commit), '.-')
-                pipe.append('tar -C %s -xf -' % output_dir,  '-.')
+                pipe.append('tar -C %s -xf -' % pipes.quote(output_dir),  '-.')
                 ret = pipe.copy('', '')
                 os.chdir(top)
                 if ret:
